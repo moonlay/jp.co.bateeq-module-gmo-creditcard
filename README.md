@@ -1,0 +1,1 @@
+# jp.co.bateeq-module-gmo-creditcard
