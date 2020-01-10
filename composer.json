@@ -15,11 +15,11 @@
     ],
     "autoload": {
         "files": [
-			"registration.php"
+		"registration.php"
 		],
         "psr-4": {
             "Moonlay\\GMOMultiPayment\\": ""
         }
     },
-	"minimum-stability": "master"
+	"minimum-stability": "dev"
 }
