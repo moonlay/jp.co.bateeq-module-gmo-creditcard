@@ -91,14 +91,21 @@
         </arguments>
     </virtualType>
 
+    <!-- Block info -->
     <type name="Moonlay\GMOMultiPayment\Block\Info">
         <arguments>
             <argument name="config" xsi:type="object">Moonlay\GMOMultiPayment\Gateway\Config\Config</argument>
         </arguments>
     </type>
 
+    <!-- Email Sender -->
     <type name="\Magento\Sales\Model\Order\Email\Sender\OrderSender">
         <plugin name="GMOMultiPayment-OrderSender-Plugin" type="Moonlay\GMOMultiPayment\Plugin\OrderSenderPlugin" />
+    </type>
+
+    <!-- Csrf Validator -->
+    <type name="Magento\Framework\App\Request\CsrfValidator">
+        <plugin name="csrf_validator_skip" type="Moonlay\GMOMultiPayment\Plugin\CsrfValidatorSkip" />
     </type>
 
 </config>

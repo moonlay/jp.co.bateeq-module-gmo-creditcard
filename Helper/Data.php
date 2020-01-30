@@ -14,7 +14,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
 /**
  * Class Moonlay_GMOMultiPayments_Helper_Data
  *
- * Provides helper methods for retrieving data for the oxipay plugin
+ * Provides helper methods for retrieving data for the gmo multipayment plugin
  */
 class Data extends AbstractHelper
 {
@@ -140,7 +140,8 @@ class Data extends AbstractHelper
     public function getCheckoutUrl()
     {
         $tshop = $this->getGatewayConfig()->getShopID();
-        $gmo_payment_page = '/Multi/Entry';
+        $gmo_payment_page = '/Credit/Entry'; // by pass to creditcard linktype settlement
+        // $gmo_payment_page = '/Multi/Entry'; // normal link type settlement
         return $this->getGatewayConfig()->getGatewayUrl() . $tshop . $gmo_payment_page;
     }
 
@@ -150,7 +151,8 @@ class Data extends AbstractHelper
      */
     public function getCompleteUrl()
     {
-        return $this->getStoreManager()->getStore()->getBaseUrl() . 'gmomultipayment/checkout/success';
+        // return $this->getStoreManager()->getStore()->getBaseUrl() . 'rest/V1/gmomultipayment/checkout/success';
+        return $this->getUrlBuilder()->getUrl('gmomultipayment/checkout/success');
     }
 
     /**
@@ -160,7 +162,8 @@ class Data extends AbstractHelper
      */
     public function getCancelledUrl($orderId)
     {
-        return $this->getStoreManager()->getStore()->getBaseUrl() . "gmomultipayment/checkout/cancel?orderId=$orderId";
+        return $this->getUrlBuilder()->getUrl('gmomultipayment/checkout/cancel') . "?orderId=$orderId";
+        // return $this->getStoreManager()->getStore()->getBaseUrl() . "gmomultipayment/checkout/cancel?orderId=$orderId";
     }
 
     /**

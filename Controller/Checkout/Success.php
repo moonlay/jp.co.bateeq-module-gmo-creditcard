@@ -3,49 +3,51 @@
 namespace Moonlay\GMOMultiPayment\Controller\Checkout;
 
 use Magento\Sales\Model\Order;
+use Magento\Sales\Model\Order\Payment\Transaction;
+use Magento\Framework\App\Action\HttpPostActionInterface;
 
 /**
  * @package Moonlay\GMOMultiPayment\Controller\Checkout
  */
-class Success extends AbstractAction {
-
-    public function execute() {
+class Success extends AbstractAction implements HttpPostActionInterface
+{
+    public function execute()
+    {
         $isValid = $this->getCryptoHelper()->isValidSignature($this->getRequest()->getParams(), $this->getGatewayConfig()->getShopID());
         $ErrCode = $this->getRequest()->get("ErrCode");
         $ErrInfo = $this->getRequest()->get("ErrInfo");
         $orderId = $this->getRequest()->get("OrderID");
-        $transactionId = $this->getRequest()->get("AccessID");
-
+        $transactionId = $this->getRequest()->get('AccessID');
 
         // $orderId = $this->getRequest()->get("x_reference");
         // $transactionId = $this->getRequest()->get("x_gateway_reference");
 
-        if(!$isValid) {
+        if (!$isValid) {
             $this->getLogger()->debug('Possible site forgery detected: invalid response signature.');
-            $this->_redirect('checkout/onepage/error', array('_secure'=> false));
+            $this->_redirect('checkout/onepage/error', array('_secure' => false));
             return;
         }
 
-        if(!$orderId) {
+        if (!$orderId) {
             $this->getLogger()->debug("GMO Multipayment returned a null order id. This may indicate an issue with the GMO Multipayment gateway.");
-            $this->_redirect('checkout/onepage/error', array('_secure'=> false));
+            $this->_redirect('checkout/onepage/error', array('_secure' => false));
             return;
         }
 
         $order = $this->getOrderById($orderId);
-        if(!$order) {
+        if (!$order) {
             $this->getLogger()->debug("GMO Multipayment returned an id for an order that could not be retrieved: $orderId");
-            $this->_redirect('checkout/onepage/error', array('_secure'=> false));
+            $this->_redirect('checkout/onepage/error', array('_secure' => false));
             return;
         }
 
-        if(empty($ErrCode) && empty($ErrInfo) && $order->getState() === Order::STATE_PROCESSING) {
-            $this->_redirect('checkout/onepage/success', array('_secure'=> false));
+        if (empty($ErrCode) && empty($ErrInfo) && $order->getState() === Order::STATE_PROCESSING) {
+            $this->_redirect('checkout/onepage/success', array('_secure' => false));
             return;
         }
 
-        if(!empty($ErrCode) && !empty($ErrInfo) && $order->getState() === Order::STATE_CANCELED) {
-            $this->_redirect('checkout/onepage/failure', array('_secure'=> false));
+        if (!empty($ErrCode) && !empty($ErrInfo) && $order->getState() === Order::STATE_CANCELED) {
+            $this->_redirect('checkout/onepage/failure', array('_secure' => false));
             return;
         }
 
@@ -59,16 +61,33 @@ class Success extends AbstractAction {
 
             $emailCustomer = $this->getGatewayConfig()->isEmailCustomer();
 
+            // changes order status and state
             $order->setState($orderState)
                 ->setStatus($orderStatus)
-                ->addStatusHistoryComment("GMO Multipayment authorisation success. Transaction #$transactionId")
+                ->addStatusHistoryComment("GMO Multipayment authorisation success. Transaction #$orderId")
                 ->setIsCustomerNotified($emailCustomer);
 
-	        $payment = $order->getPayment();
-	        $payment->setTransactionId($transactionId);
-	        $payment->addTransaction(\Magento\Sales\Model\Order\Payment\Transaction::TYPE_CAPTURE, null, true);
+            $payment = $order->getPayment();
+
+            // set new transaction
+            $payment->setTransactionId(htmlentities($orderId));
+            $transaction = $payment->addTransaction(Transaction::TYPE_CAPTURE, null, true);
+            $transaction->setAdditionalInformation("arrInfo", serialize(array(
+                'AccessID' => $transactionId,
+                'AccessPass' => $this->getRequest()->get('AccessPass')
+            )));
+            $transaction->save();
             $order->save();
 
+            // // add transaction details
+            // $payment->getTransaction($orderId)
+            //         ->setAdditionalInformation(Mage_Sales_Model_Order_Payment_Transaction::RAW_DETAILS, array(
+            //             'AccessID' => $transactionId,
+            //             'AccessPass' => $this->getRequest()->get('AccessPass')
+            //         ))
+            //         ->save();
+
+            // send invoice email
             $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
             $emailSender = $objectManager->create('\Magento\Sales\Model\Order\Email\Sender\OrderSender');
             $emailSender->send($order);
@@ -77,17 +96,18 @@ class Success extends AbstractAction {
             if ($invoiceAutomatically) {
                 $this->invoiceOrder($order, $transactionId);
             }
-            
-            $this->getMessageManager()->addSuccessMessage(__("Your payment with GMO Multipayment is complete"));
-            $this->_redirect('checkout/onepage/success', array('_secure'=> false));
+
+            $this->getMessageManager()->addSuccessMessage(__("取引は成功しました。")); // payment success notif
+            $this->_redirect('checkout/onepage/success', array('_secure' => false));
         } else {
-            $this->getCheckoutHelper()->cancelCurrentOrder("Order #".($order->getId())." was rejected by GMO Multipayment. Transaction #$transactionId.");
+            $this->getCheckoutHelper()->cancelCurrentOrder("Order #" . ($order->getId()) . " was rejected by GMO Multipayment. Transaction #$transactionId.");
             $this->getCheckoutHelper()->restoreQuote(); //restore cart
-            $this->getMessageManager()->addErrorMessage(__("There was an error in the GMO Multipayment"));
-            $this->_redirect('checkout/cart', array('_secure'=> false));
+            $this->getMessageManager()->addErrorMessage(__("お支払いに問題がありました。後でもう一度やり直してください。")); // payment failed notif
+            $this->_redirect('checkout/cart', array('_secure' => false));
         }
     }
 
+    // check order status exists
     private function statusExists($orderStatus)
     {
         $statuses = $this->getObjectManager()
@@ -100,24 +120,25 @@ class Success extends AbstractAction {
         return false;
     }
 
+    // create new invoice
     private function invoiceOrder($order, $transactionId)
     {
-        if(!$order->canInvoice()){
-                throw new \Magento\Framework\Exception\LocalizedException(
-                    __('Cannot create an invoice.')
-                );
+        if (!$order->canInvoice()) {
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('Cannot create an invoice.')
+            );
         }
-        
+
         $invoice = $this->getObjectManager()
             ->create('Magento\Sales\Model\Service\InvoiceService')
             ->prepareInvoice($order);
-        
+
         if (!$invoice->getTotalQty()) {
             throw new \Magento\Framework\Exception\LocalizedException(
-                    __('You can\'t create an invoice without products.')
-                );
+                __('You can\'t create an invoice without products.')
+            );
         }
-        
+
         /*
          * Look Magento/Sales/Model/Order/Invoice.register() for CAPTURE_OFFLINE explanation.
          * Basically, if !config/can_capture and config/is_gateway and CAPTURE_OFFLINE and 
@@ -132,5 +153,4 @@ class Success extends AbstractAction {
             ->addObject($invoice->getOrder());
         $transaction->save();
     }
-
 }
