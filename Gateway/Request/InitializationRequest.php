@@ -41,21 +41,9 @@ class InitializationRequest implements BuilderInterface
     private function validateQuote(OrderAdapter $order) {
         $total = $order->getGrandTotalAmount();
         if($total < 1) {
-            $this->_session->setOxipayErrorMessage(__("GMO Multipayment doesn't support purchases less than ¥1."));
+            $this->_session->setErrorMessage(__("GMO Multipayment doesn't support purchases less than ¥1."));
             return false;
         }
-
-        // if ($this->_gatewayConfig->isAus()) {
-        //     if ($total > 2100) {
-        //         $this->_session->setOxipayErrorMessage(__("Oxipay doesn't support purchases over $2100."));
-        //         return false;
-        //     }
-        // } else {
-        //     if ($total > 1500) {
-        //         $this->_session->setOxipayErrorMessage(__("Oxipay doesn't support purchases over $1500."));
-        //         return false;
-        //     }
-        // }
 
         $this->_logger->debug('[InitializationRequest][validateQuote]$this->_gatewayConfig->getSpecificCountry():'.($this->_gatewayConfig->getSpecificCountry()));
         $allowedCountriesArray = explode(',', $this->_gatewayConfig->getSpecificCountry());
@@ -63,13 +51,13 @@ class InitializationRequest implements BuilderInterface
         $this->_logger->debug('[InitializationRequest][validateQuote]$order->getBillingAddress()->getCountryId():'.($order->getBillingAddress()->getCountryId()));
         if (!in_array($order->getBillingAddress()->getCountryId(), $allowedCountriesArray)) {
             $this->_logger->debug('[InitializationRequest][validateQuote]Country is not in array');
-            $this->_session->setOxipayErrorMessage(__('Orders from this country are not supported by GMO Multipayment. Please select a different payment option.'));
+            $this->_session->setErrorMessage(__('Orders from this country are not supported by GMO Multipayment. Please select a different payment option.'));
             return false;
         }
 
         $this->_logger->debug('[InitializationRequest][validateQuote]$order->getShippingAddress()->getCountryId():'.($order->getShippingAddress()->getCountryId()));
         if (!in_array($order->getShippingAddress()->getCountryId(), $allowedCountriesArray)) {
-            $this->_session->setOxipayErrorMessage(__('Orders shipped to this country are not supported by GMO Multipayment. Please select a different payment option.'));
+            $this->_session->setErrorMessage(__('Orders shipped to this country are not supported by GMO Multipayment. Please select a different payment option.'));
             return false;
         }
 

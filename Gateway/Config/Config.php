@@ -22,8 +22,6 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     const KEY_SHOP_PASSWORD = 'shop_password';
     const KEY_SITE_ID = 'tsite_id';
     const KEY_SITE_PASSWORD = 'site_password';
-    // const KEY_MERCHANT_NUMBER = 'merchant_number';
-    // const KEY_API_KEY = 'api_key';
     const KEY_GATEWAY_URL = 'gateway_url';
     const KEY_DEBUG = 'debug';
     const KEY_SPECIFIC_COUNTRY = 'specificcountry';
@@ -31,14 +29,6 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     const KEY_EMAIL_CUSTOMER = 'email_customer';
     const KEY_AUTOMATIC_INVOICE = 'automatic_invoice';
 
-    // /**
-    //  * Get Merchant number
-    //  *
-    //  * @return string
-    //  */
-    // public function getMerchantNumber() {
-    //     return $this->getValue(self::KEY_MERCHANT_NUMBER);
-    // }
 
     /**
      * Get Merchant number
@@ -87,16 +77,6 @@ class Config extends \Magento\Payment\Gateway\Config\Config
         return $this->getValue(self::KEY_SITE_PASSWORD);
     }
 
-    // /**
-    //  * Is store in Australia
-    //  * @return bool
-    //  */
-    // public function isAus()
-    // {
-    //     $checkoutUrl = $this->getGatewayUrl();
-    //     return strpos($checkoutUrl, ".co.nz") ? false : true;
-    // }
-
     /**
      * Get Gateway URL
      *
@@ -127,16 +107,6 @@ class Config extends \Magento\Payment\Gateway\Config\Config
 			return 'https://portalssandbox.oxipay'.$country_domain.'/api/ExternalRefund/processrefund';
 		}
 	}
-
-    // /**
-    //  * Get API Key
-    //  *
-    //  * @return string
-    //  */
-    // public function getApiKey()
-    // {
-    //     return $this->getValue(self::KEY_API_KEY);
-    // }
 
     /**
      * Get Approved Order Status

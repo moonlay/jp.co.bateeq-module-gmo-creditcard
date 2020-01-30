@@ -46,13 +46,13 @@ abstract class AbstractAction extends Action {
         Checkout $checkoutHelper,
         LoggerInterface $logger) {
         parent::__construct($context);
+        $this->_gatewayConfig = $gatewayConfig;
         $this->_checkoutSession = $checkoutSession;
+        $this->_messageManager = $context->getMessageManager();
         $this->_orderFactory = $orderFactory;
         $this->_cryptoHelper = $cryptoHelper;
         $this->_dataHelper = $dataHelper;
         $this->_checkoutHelper = $checkoutHelper;
-        $this->_gatewayConfig = $gatewayConfig;
-        $this->_messageManager = $context->getMessageManager();
         $this->_logger = $logger;
     }
     

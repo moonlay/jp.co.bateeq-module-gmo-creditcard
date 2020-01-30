@@ -44,6 +44,11 @@ define(
                 };
             },
 
+            beforePlaceOrder: function (data) {
+                this.setPaymentMethodNonce(data.nonce);
+                this.placeOrder();
+            },
+
             afterPlaceOrder: function () {
                 window.location.replace(url.build('gmomultipayment/checkout/index'));
             },
