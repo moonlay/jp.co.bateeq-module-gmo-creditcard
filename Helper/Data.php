@@ -140,8 +140,8 @@ class Data extends AbstractHelper
     public function getCheckoutUrl()
     {
         $tshop = $this->getGatewayConfig()->getShopID();
-        $gmo_payment_page = '/Credit/Entry'; // by pass to creditcard linktype settlement
-        // $gmo_payment_page = '/Multi/Entry'; // normal link type settlement
+        // $gmo_payment_page = '/Credit/Entry'; // by pass to creditcard linktype settlement
+        $gmo_payment_page = '/Multi/Entry'; // normal link type settlement
         return $this->getGatewayConfig()->getGatewayUrl() . $tshop . $gmo_payment_page;
     }
 
