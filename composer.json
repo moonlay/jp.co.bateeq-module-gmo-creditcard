@@ -3,9 +3,9 @@
     "description": "Module GMO Payment redirect",
     "require": {
 		"php": "~7.1.3||~7.2.0||~7.3.0",
-	"magento/module-sales": "*",
-        "magento/module-checkout": "*",
-        "magento/module-payment": "*",
+	"magento/module-sales": "102.0.*",
+        "magento/module-checkout": "102.0.*",
+        "magento/module-payment": "102.0.*",
         "magento/framework": "102.0.*"
     },
     "type": "magento2-module",
