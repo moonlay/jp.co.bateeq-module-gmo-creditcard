@@ -2,6 +2,7 @@
 
 namespace Moonlay\GMOMultiPayment\Controller\Checkout;
 
+use Dotdigitalgroup\Email\Controller\Adminhtml\Rules\Value;
 use Magento\FunctionalTestingFramework\Suite\Util\SuiteObjectExtractor;
 use Magento\Sales\Model\Order;
 
@@ -45,7 +46,7 @@ class Index extends AbstractAction
             'ShopID' => $this->getGatewayConfig()->getShopID(),
             'OrderID' => $orderId,
             'Amount' => strval((int) $order->getTotalDue() - (int) $order->getShippingAmount()),
-            'Tax' => (int) $order->getShippingAmount(),
+            'Tax' => strval((int) $order->getShippingAmount()),
             'DateTime'  => date('YmdHis', strtotime($order->getCreatedAt())),
             'RetURL' => $this->getDataHelper()->getCompleteUrl(),
             'CancelURL' => $this->getDataHelper()->getCancelledUrl($orderId),
@@ -123,7 +124,7 @@ class Index extends AbstractAction
     {
         echo '<form id="form" action=' . $checkoutUrl . ' method="post">';
         foreach ($payload as $key => $value) {
-            echo '<input type="hidden" id="'.$key.'" name="'.$key.'" value="' . htmlspecialchars($value, ENT_QUOTES) . '"/>';
+            echo '<input type="hidden" id="' . $key . '" name="' . $key . '" value="' . htmlspecialchars($value, ENT_QUOTES) . '"/>';
         }
 
         echo '</form>

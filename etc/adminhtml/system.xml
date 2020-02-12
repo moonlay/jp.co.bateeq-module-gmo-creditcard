@@ -10,6 +10,7 @@
                 </field>
                 <field id="title" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Title</label>
+                    <validate>required-entry</validate>
                 </field>
                 <field id="description" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Description</label>
@@ -51,18 +52,18 @@
                     <tooltip>Select ‘Processed’ if you want to easily locate all transactions in the Orders page.</tooltip>
                     <validate>required-entry</validate>
                 </field>
-                <field id="automatic_invoice" translate="label" type="select" sortOrder="110" showInDefault="1" showInWebsite="1" showInStore="0">
-                    <label>Automatic Invoice (for refunding, must be enabled)</label>
-                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                    <tooltip>If disabled, online refunding in Magento with GMO will not be possible.</tooltip>
-                </field>
-                <field id="email_customer" translate="label" type="select" sortOrder="90" showInDefault="1" showInWebsite="1" showInStore="0">
+                <field id="email_customer" translate="label" type="select" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Email Customer</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
-                <field id="sort_order" translate="label" type="text" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="0">
+                <field id="sort_order" translate="label" type="text" sortOrder="110" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Sort Order</label>
                     <frontend_class>validate-number</frontend_class>
+                </field>
+                <field id="automatic_invoice" translate="label" type="select" sortOrder="120" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Automatic Invoice (for refunding, must be enabled)</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <tooltip>If disabled, online refunding in Magento with GMO will not be possible.</tooltip>
                 </field>
             </group>
         </section>

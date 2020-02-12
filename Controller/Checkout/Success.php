@@ -19,9 +19,6 @@ class Success extends AbstractAction implements HttpPostActionInterface
         $orderId = $this->getRequest()->get("OrderID");
         $transactionId = $this->getRequest()->get('AccessID');
 
-        // $orderId = $this->getRequest()->get("x_reference");
-        // $transactionId = $this->getRequest()->get("x_gateway_reference");
-
         if (!$isValid) {
             $this->getLogger()->debug('Possible site forgery detected: invalid response signature.');
             $this->_redirect('checkout/onepage/error', array('_secure' => false));
@@ -37,6 +34,13 @@ class Success extends AbstractAction implements HttpPostActionInterface
         $order = $this->getOrderById($orderId);
         if (!$order) {
             $this->getLogger()->debug("GMO Multipayment returned an id for an order that could not be retrieved: $orderId");
+            $this->_redirect('checkout/onepage/error', array('_secure' => false));
+            return;
+        }
+
+        $isValidPayment = $this->checkTotalDue((int) $order->getTotalDue() + (int) $order->getShippingAmount(), (int) $this->getRequest()->get("Amount"));
+        if ($isValidPayment) {
+            $this->getLogger()->debug("Sorry, something error with your payment.");
             $this->_redirect('checkout/onepage/error', array('_secure' => false));
             return;
         }
@@ -72,20 +76,12 @@ class Success extends AbstractAction implements HttpPostActionInterface
             // set new transaction
             $payment->setTransactionId(htmlentities($orderId));
             $transaction = $payment->addTransaction(Transaction::TYPE_CAPTURE, null, true);
-            $transaction->setAdditionalInformation("arrInfo", serialize(array(
+            $transaction->setAdditionalInformation(Transaction::RAW_DETAILS, array(
                 'AccessID' => $transactionId,
                 'AccessPass' => $this->getRequest()->get('AccessPass')
-            )));
+            ));
             $transaction->save();
             $order->save();
-
-            // // add transaction details
-            // $payment->getTransaction($orderId)
-            //         ->setAdditionalInformation(Mage_Sales_Model_Order_Payment_Transaction::RAW_DETAILS, array(
-            //             'AccessID' => $transactionId,
-            //             'AccessPass' => $this->getRequest()->get('AccessPass')
-            //         ))
-            //         ->save();
 
             // send invoice email
             $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
@@ -152,5 +148,12 @@ class Success extends AbstractAction implements HttpPostActionInterface
             ->addObject($invoice)
             ->addObject($invoice->getOrder());
         $transaction->save();
+    }
+
+    private function checkTotalDue(int $totalPayment, int $responseTotalPayment)
+    {
+        if ($totalPayment === $responseTotalPayment) return true;
+
+        return false;
     }
 }
