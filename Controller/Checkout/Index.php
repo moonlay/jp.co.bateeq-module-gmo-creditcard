@@ -56,7 +56,7 @@ class Index extends AbstractAction
             'UserInfo' => 'pc',
             'RetryMax' => '10',
             'SessionTimeout' => '600',
-            'Enc' => 'utf-8', 
+            'Enc' => 'utf-8',
             'Lang' => 'ja',
             'Confirm' => '1',
             'UseCredit' => '1',
