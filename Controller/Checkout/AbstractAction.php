@@ -6,6 +6,7 @@ use Magento\Framework\App\Action\Action;
 use Magento\Checkout\Model\Session;
 use Magento\Framework\App\Action\Context;
 use Magento\Sales\Model\OrderFactory;
+use Magento\Sales\Model\Order\Email\Container\OrderIdentity;
 use Moonlay\GMOMultiPayment\Helper\Crypto;
 use Moonlay\GMOMultiPayment\Helper\Data;
 use Moonlay\GMOMultiPayment\Helper\Checkout;
@@ -24,6 +25,8 @@ abstract class AbstractAction extends Action {
 
     private $_orderFactory;
 
+    private $_orderIdentity;
+
     private $_cryptoHelper;
 
     private $_dataHelper;
@@ -41,6 +44,7 @@ abstract class AbstractAction extends Action {
         Session $checkoutSession,
         Context $context,
         OrderFactory $orderFactory,
+        OrderIdentity $orderIdentity,
         Crypto $cryptoHelper,
         Data $dataHelper,
         Checkout $checkoutHelper,
@@ -50,6 +54,7 @@ abstract class AbstractAction extends Action {
         $this->_checkoutSession = $checkoutSession;
         $this->_messageManager = $context->getMessageManager();
         $this->_orderFactory = $orderFactory;
+        $this->_orderIdentity = $orderIdentity;
         $this->_cryptoHelper = $cryptoHelper;
         $this->_dataHelper = $dataHelper;
         $this->_checkoutHelper = $checkoutHelper;
@@ -66,6 +71,10 @@ abstract class AbstractAction extends Action {
 
     protected function getOrderFactory() {
         return $this->_orderFactory;
+    }
+
+    protected function getOrderIdentity() {
+        return $this->_orderIdentity;
     }
 
     protected function getCryptoHelper() {

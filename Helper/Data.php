@@ -139,10 +139,7 @@ class Data extends AbstractHelper
      */
     public function getCheckoutUrl()
     {
-        $tshop = $this->getGatewayConfig()->getShopID();
-        // $gmo_payment_page = '/Credit/Entry'; // by pass to creditcard linktype settlement
-        $gmo_payment_page = '/Multi/Entry'; // normal link type settlement
-        return $this->getGatewayConfig()->getGatewayUrl() . $tshop . $gmo_payment_page;
+        return $this->getGatewayConfig()->getGatewayUrl();
     }
 
     /**
@@ -151,7 +148,6 @@ class Data extends AbstractHelper
      */
     public function getCompleteUrl()
     {
-        // return $this->getStoreManager()->getStore()->getBaseUrl() . 'rest/V1/gmomultipayment/checkout/success';
         return $this->getUrlBuilder()->getUrl('gmomultipayment/checkout/success');
     }
 
@@ -163,7 +159,6 @@ class Data extends AbstractHelper
     public function getCancelledUrl($orderId)
     {
         return $this->getUrlBuilder()->getUrl('gmomultipayment/checkout/cancel') . "?orderId=$orderId";
-        // return $this->getStoreManager()->getStore()->getBaseUrl() . "gmomultipayment/checkout/cancel?orderId=$orderId";
     }
 
     /**
