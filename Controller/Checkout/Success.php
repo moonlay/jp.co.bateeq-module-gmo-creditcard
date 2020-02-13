@@ -40,7 +40,7 @@ class Success extends AbstractAction implements HttpPostActionInterface
         }
 
         $isValidPayment = $this->checkTotalDue((int) $order->getTotalDue(), (int) $this->getRequest()->get("Amount"));
-        if ($isValidPayment) {
+        if (!$isValidPayment) {
             $this->getLogger()->debug("Sorry, something error with your payment.");
             $this->_redirect('checkout/onepage/error', array('_secure' => false));
             return;
@@ -153,8 +153,8 @@ class Success extends AbstractAction implements HttpPostActionInterface
 
     private function checkTotalDue(int $totalPayment, int $responseTotalPayment)
     {
-        if ($totalPayment === $responseTotalPayment) return false;
+        if ($totalPayment === $responseTotalPayment) return true;
 
-        return true;
+        return false;
     }
 }
