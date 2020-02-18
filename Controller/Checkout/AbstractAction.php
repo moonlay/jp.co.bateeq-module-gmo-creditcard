@@ -6,6 +6,7 @@ use Magento\Framework\App\Action\Action;
 use Magento\Checkout\Model\Session;
 use Magento\Framework\App\Action\Context;
 use Magento\Sales\Model\OrderFactory;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Moonlay\GMOMultiPayment\Helper\Crypto;
 use Moonlay\GMOMultiPayment\Helper\Data;
 use Moonlay\GMOMultiPayment\Helper\Checkout;
@@ -30,6 +31,8 @@ abstract class AbstractAction extends Action {
 
     private $_checkoutHelper;
 
+    private $_scopeConfig;
+
     private $_gatewayConfig;
 
     private $_messageManager;
@@ -42,6 +45,7 @@ abstract class AbstractAction extends Action {
         Context $context,
         OrderFactory $orderFactory,
         Crypto $cryptoHelper,
+        ScopeConfigInterface $scopeConfigInterface,
         Data $dataHelper,
         Checkout $checkoutHelper,
         LoggerInterface $logger) {
@@ -50,6 +54,7 @@ abstract class AbstractAction extends Action {
         $this->_checkoutSession = $checkoutSession;
         $this->_messageManager = $context->getMessageManager();
         $this->_orderFactory = $orderFactory;
+        $this->_scopeConfig = $scopeConfigInterface;
         $this->_cryptoHelper = $cryptoHelper;
         $this->_dataHelper = $dataHelper;
         $this->_checkoutHelper = $checkoutHelper;
@@ -78,6 +83,10 @@ abstract class AbstractAction extends Action {
 
     protected function getCheckoutHelper() {
         return $this->_checkoutHelper;
+    }
+
+    protected function getScopeConfig() {
+        return $this->_scopeConfig;
     }
 
     protected function getGatewayConfig() {
@@ -117,6 +126,10 @@ abstract class AbstractAction extends Action {
     protected function getObjectManager()
     {
         return \Magento\Framework\App\ObjectManager::getInstance();
+    }
+
+    protected function getCustomerSupportEmail() {
+        return $this->getScopeConfig()->getValue('trans_email/ident_support/email', ScopeInterface::SCOPE_STORE);
     }
 
 }
