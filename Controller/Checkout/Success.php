@@ -13,6 +13,7 @@ class Success extends AbstractAction implements HttpPostActionInterface
 {
     public function execute()
     {
+        $Params = $this->getRequest()->getParams();
         $isValid = $this->getCryptoHelper()->isValidSignature($this->getRequest()->getParams(), $this->getGatewayConfig()->getShopID());
         $ErrCode = $this->getRequest()->get("ErrCode");
         $ErrInfo = $this->getRequest()->get("ErrInfo");
@@ -21,27 +22,32 @@ class Success extends AbstractAction implements HttpPostActionInterface
 
         if (!$isValid) {
             $this->getLogger()->debug('Possible site forgery detected: invalid response signature.');
-            $this->_redirect('checkout/onepage/error', array('_secure' => false));
+            $this->getMessageManager()->addErrorMessage(__("エラー！ 不明な応答。 " . $this->getCustomerSupportEmail() . " にお問い合わせください。")); // payment failed notif
+            $this->_redirect('checkout/onepage/failure', array('_secure' => false));
             return;
         }
 
         if (!$orderId) {
             $this->getLogger()->debug("GMO Multipayment returned a null order id. This may indicate an issue with the GMO Multipayment gateway.");
-            $this->_redirect('checkout/onepage/error', array('_secure' => false));
+            $this->getMessageManager()->addErrorMessage(__("注文は見つかりませんでした。" . $this->getCustomerSupportEmail() . " にお問い合わせください。")); // payment failed notif
+            $this->_redirect('checkout/onepage/failure', array('_secure' => false));
             return;
         }
 
         $order = $this->getOrderById($orderId);
         if (!$order) {
-            $this->getLogger()->debug("GMO Multipayment returned an id for an order that could not be retrieved: $orderId");
-            $this->_redirect('checkout/onepage/error', array('_secure' => false));
+            $this->getLogger()->debug("Order ID was not found: #$orderId");
+            $this->getMessageManager()->addErrorMessage(__("注文は見つかりませんでした。" . $this->getCustomerSupportEmail() . " にお問い合わせください。")); // payment failed notif
+            $this->_redirect('checkout/onepage/failure', array('_secure' => false));
             return;
         }
 
-        $isValidPayment = $this->checkTotalDue((int) $order->getTotalDue(), (int) $this->getRequest()->get("Amount"));
+        $isValidPayment = $this->checkTotalDue((int) $order->getTotalDue(), (int) $this->getRequest()->get("Amount") + (int) $this->getRequest()->get("Tax"));
         if (!$isValidPayment) {
-            $this->getLogger()->debug("Sorry, something error with your payment.");
-            $this->_redirect('checkout/onepage/error', array('_secure' => false));
+            $this->getLogger()->debug("GMO Multipayment returned response total price was does not match the order id: $orderId");
+            $this->getCheckoutHelper()->cancelCurrentOrder("Order #$orderId was rejected by System. Transaction #$transactionId.");
+            $this->getMessageManager()->addErrorMessage(__("申し訳ありませんが、お支払いはシステムによって拒否されました。")); // payment failed notif
+            $this->_redirect('checkout/onepage/failure', array('_secure' => false));
             return;
         }
 
@@ -51,7 +57,9 @@ class Success extends AbstractAction implements HttpPostActionInterface
         }
 
         if (!empty($ErrCode) && !empty($ErrInfo) && $order->getState() === Order::STATE_CANCELED) {
-            $this->_redirect('checkout/onepage/failure', array('_secure' => false));
+            $this->getCheckoutHelper()->restoreQuote(); //restore cart
+            $this->getMessageManager()->addErrorMessage(__("ご注文はキャンセルされました。再注文してください")); // payment failed notif
+            $this->_redirect('checkout/cart', array('_secure' => false));
             return;
         }
 
@@ -96,7 +104,7 @@ class Success extends AbstractAction implements HttpPostActionInterface
             $this->getMessageManager()->addSuccessMessage(__("取引は成功しました。")); // payment success notif
             $this->_redirect('checkout/onepage/success', array('_secure' => false));
         } else {
-            $this->getCheckoutHelper()->cancelCurrentOrder("Order #" . ($order->getId()) . " was rejected by GMO Multipayment. Transaction #$transactionId.");
+            $this->getCheckoutHelper()->cancelCurrentOrder("Order #$orderId was rejected by GMO Multipayment. Transaction #$transactionId.");
             $this->getCheckoutHelper()->restoreQuote(); //restore cart
             $this->getMessageManager()->addErrorMessage(__("お支払いに問題がありました。後でもう一度やり直してください。")); // payment failed notif
             $this->_redirect('checkout/cart', array('_secure' => false));
@@ -152,7 +160,7 @@ class Success extends AbstractAction implements HttpPostActionInterface
 
     private function checkTotalDue(int $totalPayment, int $responseTotalPayment)
     {
-        if ($totalPayment === $responseTotalPayment) return true;
+        if ($totalPayment == $responseTotalPayment) return true;
 
         return false;
     }
