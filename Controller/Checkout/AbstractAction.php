@@ -129,7 +129,7 @@ abstract class AbstractAction extends Action {
     }
 
     protected function getCustomerSupportEmail() {
-        return $this->getScopeConfig()->getValue('trans_email/ident_support/email', ScopeInterface::SCOPE_STORE);
+        return $this->getScopeConfig()->getValue('trans_email/ident_support/email', \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
     }
 
 }
