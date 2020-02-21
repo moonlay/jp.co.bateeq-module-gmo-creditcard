@@ -13,7 +13,6 @@ class Success extends AbstractAction implements HttpPostActionInterface
 {
     public function execute()
     {
-        $Params = $this->getRequest()->getParams();
         $isValid = $this->getCryptoHelper()->isValidSignature($this->getRequest()->getParams(), $this->getGatewayConfig()->getShopID());
         $ErrCode = $this->getRequest()->get("ErrCode");
         $ErrInfo = $this->getRequest()->get("ErrInfo");
