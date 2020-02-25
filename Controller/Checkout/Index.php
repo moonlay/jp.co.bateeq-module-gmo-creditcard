@@ -13,11 +13,6 @@ class Index extends AbstractAction
 {
     private function getGMOData($order)
     {
-        if ($order == null) {
-            $this->getLogger()->debug('Unable to get order from last lodged order id. Possibly related to a failed database call');
-            $this->_redirect('checkout/onepage/error', array('_secure' => false));
-        }
-
         $orderId = $order->getRealOrderId();
         $customerId = $order->load($orderId)->getCustomerId();
 
@@ -117,6 +112,7 @@ class Index extends AbstractAction
             'PayDescription'  => null,
             'CarryInfo' => null
         );
+
         return $data;
     }
 
@@ -142,6 +138,9 @@ class Index extends AbstractAction
     {
         try {
             $order = $this->getOrder();
+
+            if (!$order) throw new \Exception("Internal Error : Order ID not found.");
+
             if ($order->getState() === Order::STATE_PENDING_PAYMENT) {
                 // $payload = $this->getPayload($order);
                 $payload = $this->getGMOData($order);
@@ -158,7 +157,7 @@ class Index extends AbstractAction
                 $this->getLogger()->debug('Order in unrecognized state: ' . $order->getState());
                 $this->_redirect('checkout/cart');
             }
-        } catch (Exception $ex) {
+        } catch (\Exception $ex) {
             $this->getLogger()->debug('An exception was encountered in GMOMultiPayment/checkout/index: ' . $ex->getMessage());
             $this->getLogger()->debug($ex->getTraceAsString());
             $this->getMessageManager()->addErrorMessage(__('Unable to start gmo multipayment Checkout.'));
