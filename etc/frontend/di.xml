@@ -9,11 +9,11 @@
     <type name="Magento\Checkout\Model\CompositeConfigProvider">
         <arguments>
             <argument name="configProviders" xsi:type="array">
-                <item name="gmo_multipayment_gateway_config_provider" xsi:type="object">Moonlay\GMOMultiPayment\Model\Ui\ConfigProvider</item>
+                <item name="gmo_creditcard_gateway_config_provider" xsi:type="object">Moonlay\GMOCreditCard\Model\Ui\ConfigProvider</item>
             </argument>
         </arguments>
     </type>
-    <type name="Moonlay\GMOMultiPayment\Block\Info">
+    <type name="Moonlay\GMOCreditCard\Block\Info">
         <arguments>
             <argument name="data" xsi:type="array">
                 <item xsi:type="string" name="is_secure_mode">1</item>

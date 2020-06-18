@@ -26,7 +26,7 @@ define(
             redirectAfterPlaceOrder: false,
 
             defaults: {
-                template: 'Moonlay_GMOMultiPayment/payment/form'
+                template: 'Moonlay_GMOCreditCard/payment/form'
             },
 
             initialize: function() {
@@ -35,7 +35,7 @@ define(
             },
 
             getCode: function() {
-                return 'gmo_multipayment';
+                return 'gmo_creditcard';
             },
 
             getData: function() {
@@ -45,7 +45,7 @@ define(
             },
 
             afterPlaceOrder: function () {
-                window.location.replace(url.build('gmomultipayment/checkout/index'));
+                window.location.replace(url.build('gmocreditcard/checkout/index'));
             },
 
             /*
@@ -65,32 +65,30 @@ define(
                 self.messageContainer.clear();
 
                 if (!billingAddress) {
-                    self.messageContainer.addErrorMessage({'message': 'Please enter your billing address'});
+                    self.messageContainer.addErrorMessage({'message': '請求先住所を入力してください'});
                     return false;
                 }
 
                 if (!billingAddress.firstname || 
                     !billingAddress.lastname ||
                     !billingAddress.street ||
-                    !billingAddress.city ||
                     !billingAddress.postcode ||
                     billingAddress.firstname.length == 0 ||
                     billingAddress.lastname.length == 0 ||
                     billingAddress.street.length == 0 ||
-                    billingAddress.city.length == 0 ||
                     billingAddress.postcode.length == 0) {
-                    self.messageContainer.addErrorMessage({'message': 'Please enter your billing address details'});
+                    self.messageContainer.addErrorMessage({'message': '請求先住所に詳しく入力してください'});
                     return false;
                 }
 
                 if (allowedCountriesArray.indexOf(billingAddress.countryId) == -1 ||
                     allowedCountriesArray.indexOf(shippingAddress.countryId) == -1) {
-                    self.messageContainer.addErrorMessage({'message': 'Orders from this country are not supported by GMO Multipayment. Please select a different payment option.'});
+                    self.messageContainer.addErrorMessage({'message': 'この国からの注文はGMOマルチペイメントではサポートされていませんので別の支払いオプションを選択してください。'});
                     return false;
                 }
 
                 if (totals.grand_total < 1) {
-                    self.messageContainer.addErrorMessage({'message': 'GMO Multipayment doesn\'t support purchases less than ¥1.'});
+                    self.messageContainer.addErrorMessage({'message': '¥1 以下の支払いはGMOマルチペイメントではサポートされていません'});
                     return false;
                 }
 
@@ -98,21 +96,21 @@ define(
             },
 
             getTitle: function() {
-                return window.checkoutConfig.payment.gmo_multipayment.title;
+                return window.checkoutConfig.payment.gmo_creditcard.title;
             },
 
             getDescription: function() {
-                return window.checkoutConfig.payment.gmo_multipayment.description;
+                return window.checkoutConfig.payment.gmo_creditcard.description;
             },
             
             getLogo:function(){
-                var logo = window.checkoutConfig.payment.gmo_multipayment.logo;
+                var logo = window.checkoutConfig.payment.gmo_creditcard.logo;
 
                 return logo;
             },
 
             getAllowedCountries: function() {
-                return window.checkoutConfig.payment.gmo_multipayment.allowed_countries;
+                return window.checkoutConfig.payment.gmo_creditcard.allowed_countries;
             }
 
         });

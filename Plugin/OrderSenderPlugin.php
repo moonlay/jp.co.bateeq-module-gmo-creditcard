@@ -1,6 +1,6 @@
 <?php
 
-namespace Moonlay\GMOMultiPayment\Plugin;
+namespace Moonlay\GMOCreditCard\Plugin;
 
 use Magento\Sales\Model\Order;
 
@@ -10,7 +10,7 @@ class OrderSenderPlugin
     {
         $payment = $order->getPayment()->getMethodInstance()->getCode();
 
-        if($payment === 'gmo_multipayment' && $order->getState() !== 'processing'){
+        if($payment === 'gmo_creditcard' && $order->getState() !== 'processing'){
             return false;
         }
 

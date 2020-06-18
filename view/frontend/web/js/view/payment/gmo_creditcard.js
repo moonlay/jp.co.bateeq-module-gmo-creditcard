@@ -16,8 +16,8 @@ define(
         'use strict';
         rendererList.push(
             {
-                type: 'gmo_multipayment',
-                component: 'Moonlay_GMOMultiPayment/js/view/payment/method-renderer/gmo_multipayment'
+                type: 'gmo_creditcard',
+                component: 'Moonlay_GMOCreditCard/js/view/payment/method-renderer/gmo_creditcard'
             }
         );
         /** Add view logic here if needed */

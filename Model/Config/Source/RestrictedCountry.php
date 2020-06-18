@@ -4,7 +4,7 @@
  * Country config field renderer
  */
 
-namespace Moonlay\GMOMultiPayment\Model\Config\Source;
+namespace Moonlay\GMOCreditCard\Model\Config\Source;
 
 use Magento\Directory\Model\Config\Source\Country;
 

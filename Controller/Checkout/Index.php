@@ -1,13 +1,13 @@
 <?php
 
-namespace Moonlay\GMOMultiPayment\Controller\Checkout;
+namespace Moonlay\GMOCreditCard\Controller\Checkout;
 
 use Dotdigitalgroup\Email\Controller\Adminhtml\Rules\Value;
 use Magento\FunctionalTestingFramework\Suite\Util\SuiteObjectExtractor;
 use Magento\Sales\Model\Order;
 
 /**
- * @package Moonlay\GMOMultiPayment\Controller\Checkout
+ * @package Moonlay\GMOCreditCard\Controller\Checkout
  */
 class Index extends AbstractAction
 {
@@ -158,9 +158,9 @@ class Index extends AbstractAction
                 $this->_redirect('checkout/cart');
             }
         } catch (\Exception $ex) {
-            $this->getLogger()->debug('An exception was encountered in GMOMultiPayment/checkout/index: ' . $ex->getMessage());
+            $this->getLogger()->debug('An exception was encountered in GMOCreditCard/checkout/index: ' . $ex->getMessage());
             $this->getLogger()->debug($ex->getTraceAsString());
-            $this->getMessageManager()->addErrorMessage(__('Unable to start gmo multipayment Checkout.'));
+            $this->getMessageManager()->addErrorMessage(__('Unable to start gmo creditcard checkout.'));
         }
     }
 }

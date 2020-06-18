@@ -3,13 +3,13 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Moonlay\GMOMultiPayment\Gateway\Request;
+namespace Moonlay\GMOCreditCard\Gateway\Request;
 
 use Magento\Sales\Model\Order;
 use Magento\Payment\Gateway\Data\Order\OrderAdapter;
 use Magento\Payment\Gateway\Request\BuilderInterface;
 use Magento\Checkout\Model\Session;
-use Moonlay\GMOMultiPayment\Gateway\Config\Config;
+use Moonlay\GMOCreditCard\Gateway\Config\Config;
 use Psr\Log\LoggerInterface;
 
 class InitializationRequest implements BuilderInterface
@@ -41,7 +41,7 @@ class InitializationRequest implements BuilderInterface
     private function validateQuote(OrderAdapter $order) {
         $total = $order->getGrandTotalAmount();
         if($total < 1) {
-            $this->_session->setErrorMessage(__("GMO Multipayment doesn't support purchases less than ¥1."));
+            $this->_session->setErrorMessage(__("GMO Creditcard doesn't support purchases less than ¥1."));
             return false;
         }
 
@@ -51,13 +51,13 @@ class InitializationRequest implements BuilderInterface
         $this->_logger->debug('[InitializationRequest][validateQuote]$order->getBillingAddress()->getCountryId():'.($order->getBillingAddress()->getCountryId()));
         if (!in_array($order->getBillingAddress()->getCountryId(), $allowedCountriesArray)) {
             $this->_logger->debug('[InitializationRequest][validateQuote]Country is not in array');
-            $this->_session->setErrorMessage(__('Orders from this country are not supported by GMO Multipayment. Please select a different payment option.'));
+            $this->_session->setErrorMessage(__('Orders from this country are not supported by GMO Creditcard. Please select a different payment option.'));
             return false;
         }
 
         $this->_logger->debug('[InitializationRequest][validateQuote]$order->getShippingAddress()->getCountryId():'.($order->getShippingAddress()->getCountryId()));
         if (!in_array($order->getShippingAddress()->getCountryId(), $allowedCountriesArray)) {
-            $this->_session->setErrorMessage(__('Orders shipped to this country are not supported by GMO Multipayment. Please select a different payment option.'));
+            $this->_session->setErrorMessage(__('Orders shipped to this country are not supported by GMO Creditcard. Please select a different payment option.'));
             return false;
         }
 

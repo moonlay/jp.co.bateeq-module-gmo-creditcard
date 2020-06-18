@@ -1,6 +1,6 @@
 <?php
 
-namespace Moonlay\GMOMultiPayment\Plugin;
+namespace Moonlay\GMOCreditCard\Plugin;
 
 class CsrfValidatorSkip
 {
@@ -16,7 +16,7 @@ class CsrfValidatorSkip
         $request,
         $action
     ) {
-        if ($request->getModuleName() == 'gmomultipayment') {
+        if ($request->getModuleName() == 'gmocreditcard') {
             return; // Skip CSRF check
         }
         $proceed($request, $action); // Proceed Magento 2 core functionalities

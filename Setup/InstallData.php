@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Moonlay\GMOMultiPayment\Setup;
+namespace Moonlay\GMOCreditCard\Setup;
 
 use Magento\Framework\Setup\InstallDataInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
@@ -24,20 +24,20 @@ class InstallData implements InstallDataInterface
          */
         $setup->startSetup();
 
-        // add default GMO Multipayment Status "Processed" for STATE_PROCESSING state
+        // add default GMO GMOCreditCard Status "Processed" for STATE_PROCESSING state
         $statusTable = 'sales_order_status';
         $statusStateTable = 'sales_order_status_state';
-        $ProcessingStatus = 'gmomultipayment_processed';
+        $ProcessingStatus = 'gmocreditcard_processed';
         $processingState  = \Magento\Sales\Model\Order::STATE_PROCESSING;
 
-        //Insert 'gmomultipayment_processed' status
+        //Insert 'gmocreditcard_processed' status
         $setup->getConnection()->insertArray(
             $statusTable,
             array('status', 'label'),
             array(array('status' => $ProcessingStatus, 'label' => 'Processed'))
         );
 
-        //Associate 'gmomultipayment_processed' status with STATE_PROCESSING state
+        //Associate 'gmocreditcard_processed' status with STATE_PROCESSING state
         $setup->getConnection()->insertArray(
             $statusStateTable,
             array('status', 'state', 'is_default', 'visible_on_front'),

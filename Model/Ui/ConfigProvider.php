@@ -3,7 +3,7 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Moonlay\GMOMultiPayment\Model\Ui;
+namespace Moonlay\GMOCreditCard\Model\Ui;
 
 use Magento\Checkout\Model\ConfigProviderInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
@@ -11,7 +11,7 @@ use Magento\Customer\Model\Session;
 use Magento\Backend\Model\Session\Quote;
 use Magento\Framework\App\Helper\Context;
 use Magento\Framework\View\Asset\Repository;
-use Moonlay\GMOMultiPayment\Gateway\Config\Config;
+use Moonlay\GMOCreditCard\Gateway\Config\Config;
 
 /**
  * Class ConfigProvider
@@ -55,7 +55,7 @@ final class ConfigProvider implements ConfigProviderInterface
             $params = array();
             $params = array_merge(['_secure' => $request->isSecure()], $params);
 
-            $logo = $this->_assetRepo->getUrlWithParams('Moonlay_GMOMultiPayment::images/creditcard_logo.png', $params);
+            $logo = $this->_assetRepo->getUrlWithParams('Moonlay_GMOCreditCard::images/creditcard_logo.png', $params);
         }
 
         $config = [

@@ -3,7 +3,7 @@
  * Copyright © 2013-2017 Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Moonlay\GMOMultiPayment\Gateway\Config;
+namespace Moonlay\GMOCreditCard\Gateway\Config;
 
 /**
  * Class Config.
@@ -12,7 +12,7 @@ namespace Moonlay\GMOMultiPayment\Gateway\Config;
  */
 class Config extends \Magento\Payment\Gateway\Config\Config
 {
-    const CODE = 'gmo_multipayment';
+    const CODE = 'gmo_creditcard';
 
     const KEY_ACTIVE = 'active';
     const KEY_TITLE = 'title';
@@ -25,7 +25,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     const KEY_GATEWAY_URL = 'gateway_url';
     const KEY_DEBUG = 'debug';
     const KEY_SPECIFIC_COUNTRY = 'specificcountry';
-    const KEY_GMO_MULTIPAYMENT_APPROVED_ORDER_STATUS = 'gmo_multipayment_approved_order_status';
+    const KEY_GMO_CREDITCARD_APPROVED_ORDER_STATUS = 'gmo_creditcard_approved_order_status';
     const KEY_EMAIL_CUSTOMER = 'email_customer';
     const KEY_AUTOMATIC_INVOICE = 'automatic_invoice';
 
@@ -115,7 +115,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
      */
     public function getApprovedOrderStatus()
     {
-        return $this->getValue(self::KEY_GMO_MULTIPAYMENT_APPROVED_ORDER_STATUS);
+        return $this->getValue(self::KEY_GMO_CREDITCARD_APPROVED_ORDER_STATUS);
     }
 
     /**

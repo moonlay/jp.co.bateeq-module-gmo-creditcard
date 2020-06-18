@@ -8,9 +8,9 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
     <default>
         <payment>
-            <gmo_multipayment>
-                <model>GMOMultipaymentGatewayFacade</model>
-                <title>Multipayment (GMO)</title>
+            <gmo_creditcard>
+                <model>GMOCreditcardGatewayFacade</model>
+                <title>Credit Card (GMO)</title>
                 <payment_action>initialize</payment_action> <!--Important: read Magento\Sales\Model\Order-->
                 <active>0</active> <!--Plugin disabled by default. The user must configure it first.-->
                 <is_gateway>1</is_gateway>
@@ -33,7 +33,7 @@
                 <can_edit>0</can_edit>
                 <can_review_payment>1</can_review_payment>
                 <can_deny_payment>1</can_deny_payment>
-            </gmo_multipayment>
+            </gmo_creditcard>
         </payment>
     </default>
 </config>
