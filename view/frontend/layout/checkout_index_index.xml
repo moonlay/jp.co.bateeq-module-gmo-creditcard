@@ -24,10 +24,10 @@
                                                         <item name="renders" xsi:type="array">
                                                             <!-- merge payment method renders here -->
                                                             <item name="children" xsi:type="array">
-                                                                <item name="gmo_multipayment" xsi:type="array">
-                                                                    <item name="component" xsi:type="string">Moonlay_GMOMultiPayment/js/view/payment/gmo_multipayment</item>
+                                                                <item name="gmo_creditcard" xsi:type="array">
+                                                                    <item name="component" xsi:type="string">Moonlay_GMOCreditCard/js/view/payment/gmo_creditcard</item>
                                                                     <item name="methods" xsi:type="array">
-                                                                        <item name="gmo_multipayment" xsi:type="array">
+                                                                        <item name="gmo_creditcard" xsi:type="array">
                                                                             <item name="isBillingAddressRequired" xsi:type="boolean">false</item>
                                                                         </item>
                                                                     </item>

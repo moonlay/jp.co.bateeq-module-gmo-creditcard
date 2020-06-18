@@ -1,13 +1,13 @@
 <?php
 
-namespace Moonlay\GMOMultiPayment\Controller\Checkout;
+namespace Moonlay\GMOCreditCard\Controller\Checkout;
 
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Payment\Transaction;
 use Magento\Framework\App\Action\HttpPostActionInterface;
 
 /**
- * @package Moonlay\GMOMultiPayment\Controller\Checkout
+ * @package Moonlay\GMOCreditCard\Controller\Checkout
  */
 class Success extends AbstractAction implements HttpPostActionInterface
 {
@@ -27,7 +27,7 @@ class Success extends AbstractAction implements HttpPostActionInterface
         }
 
         if (!$orderId) {
-            $this->getLogger()->debug("GMO Multipayment returned a null order id. This may indicate an issue with the GMO Multipayment gateway.");
+            $this->getLogger()->debug("GMO Creditcard returned a null order id. This may indicate an issue with the GMO Creditcard gateway.");
             $this->getMessageManager()->addErrorMessage(__("注文は見つかりませんでした。" . $this->getCustomerSupportEmail() . " にお問い合わせください。")); // payment failed notif
             $this->_redirect('checkout/onepage/failure', array('_secure' => false));
             return;
@@ -43,7 +43,7 @@ class Success extends AbstractAction implements HttpPostActionInterface
 
         $isValidPayment = $this->checkTotalDue((int) $order->getTotalDue(), (int) $this->getRequest()->get("Amount") + (int) $this->getRequest()->get("Tax"));
         if (!$isValidPayment) {
-            $this->getLogger()->debug("GMO Multipayment returned response total price was does not match the order id: $orderId");
+            $this->getLogger()->debug("GMO Creditcard returned response total price was does not match the order id: $orderId");
             $this->getCheckoutHelper()->cancelCurrentOrder("Order #$orderId was rejected by System. Transaction #$transactionId.");
             $this->getMessageManager()->addErrorMessage(__("申し訳ありませんが、お支払いはシステムによって拒否されました。")); // payment failed notif
             $this->_redirect('checkout/onepage/failure', array('_secure' => false));
@@ -75,7 +75,7 @@ class Success extends AbstractAction implements HttpPostActionInterface
             // changes order status and state
             $order->setState($orderState)
                 ->setStatus($orderStatus)
-                ->addStatusHistoryComment("GMO Multipayment authorisation success. Transaction #$orderId")
+                ->addStatusHistoryComment("GMO Creditcard authorisation success. Transaction #$orderId")
                 ->setIsCustomerNotified($emailCustomer);
 
             $payment = $order->getPayment();
@@ -103,7 +103,7 @@ class Success extends AbstractAction implements HttpPostActionInterface
             $this->getMessageManager()->addSuccessMessage(__("取引は成功しました。")); // payment success notif
             $this->_redirect('checkout/onepage/success', array('_secure' => false));
         } else {
-            $this->getCheckoutHelper()->cancelCurrentOrder("Order #$orderId was rejected by GMO Multipayment. Transaction #$transactionId.");
+            $this->getCheckoutHelper()->cancelCurrentOrder("Order #$orderId was rejected by GMO Creditcard. Transaction #$transactionId.");
             $this->getCheckoutHelper()->restoreQuote(); //restore cart
             $this->getMessageManager()->addErrorMessage(__("お支払いに問題がありました。後でもう一度やり直してください。")); // payment failed notif
             $this->_redirect('checkout/cart', array('_secure' => false));

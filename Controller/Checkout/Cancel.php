@@ -1,9 +1,9 @@
 <?php
 
-namespace Moonlay\GMOMultiPayment\Controller\Checkout;
+namespace Moonlay\GMOCreditCard\Controller\Checkout;
 
 /**
- * @package Moonlay\GMOMultiPayment\Controller\Checkout
+ * @package Moonlay\GMOCreditCard\Controller\Checkout
  */
 class Cancel extends AbstractAction {
     
@@ -13,9 +13,9 @@ class Cancel extends AbstractAction {
 
         if ($order && $order->getId()) {
             $this->getLogger()->debug('Requested order cancellation by customer. OrderId: ' . $order->getIncrementId());
-            $this->getCheckoutHelper()->cancelCurrentOrder("GMO Multipayment: ".($order->getId())." was cancelled by the customer.");
+            $this->getCheckoutHelper()->cancelCurrentOrder("GMO Creditcard: ".($order->getId())." was cancelled by the customer.");
             $this->getCheckoutHelper()->restoreQuote(); //restore cart
-            $this->getMessageManager()->addWarningMessage(__("You have successfully canceled your GMO Multipayment. Please click on 'Update Shopping Cart'."));
+            $this->getMessageManager()->addWarningMessage(__("You have successfully canceled your GMO Creditcard. Please click on 'Update Shopping Cart'."));
         }
         $this->_redirect('checkout/cart');
     }

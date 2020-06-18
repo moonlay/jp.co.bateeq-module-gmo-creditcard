@@ -19,7 +19,7 @@
 		"registration.php"
 		],
         "psr-4": {
-            "Moonlay\\GMOMultiPayment\\": ""
+            "Moonlay\\GMOCreditCard\\": ""
         }
     },
 	"minimum-stability": "dev",

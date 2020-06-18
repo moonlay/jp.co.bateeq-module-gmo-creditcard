@@ -1,6 +1,6 @@
 <?php
 
-namespace Moonlay\GMOMultiPayment\Block\System\Config\Form\Field;
+namespace Moonlay\GMOCreditCard\Block\System\Config\Form\Field;
 
 class Image extends \Magento\Config\Block\System\Config\Form\Field 
 {
@@ -9,7 +9,7 @@ class Image extends \Magento\Config\Block\System\Config\Form\Field
         $html = '';
 
         if (!(string)$element->getValue()) {
-            $defaultImage = $this->getViewFileUrl('Moonlay_GMOMultiPayment::images/creditcard_logo.png');
+            $defaultImage = $this->getViewFileUrl('Moonlay_CreditCard::images/creditcard_logo.png');
             
             $html .= '<img src="' . $defaultImage . '" alt="Credit Card logo" height="50" width="85" class="small-image-preview v-middle" />';
             $html .= '<p class="note"><span>Upload a new image if you wish to replace this logo.</span></p>';

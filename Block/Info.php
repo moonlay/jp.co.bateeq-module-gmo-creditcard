@@ -1,6 +1,6 @@
 <?php
 
-namespace Moonlay\GMOMultiPayment\Block;
+namespace Moonlay\GMOCreditCard\Block;
 
 use Magento\Framework\Phrase;
 use Magento\Payment\Block\ConfigurableInfo;

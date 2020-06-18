@@ -1,9 +1,9 @@
 <?php
 
-namespace Moonlay\GMOMultiPayment\Helper;
+namespace Moonlay\GMOCreditCard\Helper;
 
 use Magento\Framework\App\Helper\AbstractHelper;
-use Moonlay\GMOMultiPayment\Gateway\Config\Config;
+use Moonlay\GMOCreditCard\Gateway\Config\Config;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\App\Helper\Context;
@@ -12,15 +12,15 @@ use Magento\Payment\Helper\Data as PaymentData;
 use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
- * Class Moonlay_GMOMultiPayments_Helper_Data
+ * Class Moonlay_GMOCreditCards_Helper_Data
  *
- * Provides helper methods for retrieving data for the gmo multipayment plugin
+ * Provides helper methods for retrieving data for the gmo creditcard plugin
  */
 class Data extends AbstractHelper
 {
 
     /**
-     * @var \Moonlay\GMOMultiPayment\Gateway\Config\Config
+     * @var \Moonlay\GMOCreditCard\Gateway\Config\Config
      */
     protected $_gatewayConfig;
     /**
@@ -45,7 +45,7 @@ class Data extends AbstractHelper
     protected $_localeResolver;
 
     /**
-     * @param \Moonlay\GMOMultiPayment\Gateway\Config\Config $gatewayConfig
+     * @param \Moonlay\GMOCreditCard\Gateway\Config\Config $gatewayConfig
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\Payment\Helper\Data $paymentData
@@ -74,7 +74,7 @@ class Data extends AbstractHelper
     /**
      * Creates an Instance of the Helper
      * @param  \Magento\Framework\ObjectManagerInterface $objectManager
-     * @return \Moonlay\GMOMultiPayment\Helper\Data
+     * @return \Moonlay\GMOCreditCard\Helper\Data
      */
     public static function getInstance($objectManager)
     {
@@ -134,7 +134,7 @@ class Data extends AbstractHelper
     }
 
     /**
-     * get the URL of the configured gmo multipayment gateway checkout
+     * get the URL of the configured gmo creditcard gateway checkout
      * @return string
      */
     public function getCheckoutUrl()
@@ -148,7 +148,7 @@ class Data extends AbstractHelper
      */
     public function getCompleteUrl()
     {
-        return $this->getUrlBuilder()->getUrl('gmomultipayment/checkout/success');
+        return $this->getUrlBuilder()->getUrl('gmocreditcard/checkout/success');
     }
 
     /**
@@ -158,7 +158,7 @@ class Data extends AbstractHelper
      */
     public function getCancelledUrl($orderId)
     {
-        return $this->getUrlBuilder()->getUrl('gmomultipayment/checkout/cancel') . "?orderId=$orderId";
+        return $this->getUrlBuilder()->getUrl('gmocreditcard/checkout/cancel') . "?orderId=$orderId";
     }
 
     /**

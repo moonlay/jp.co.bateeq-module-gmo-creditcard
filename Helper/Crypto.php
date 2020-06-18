@@ -1,6 +1,6 @@
 <?php
 
-namespace Moonlay\GMOMultiPayment\Helper;
+namespace Moonlay\GMOCreditCard\Helper;
 
 /**
  * Created by PhpStorm.

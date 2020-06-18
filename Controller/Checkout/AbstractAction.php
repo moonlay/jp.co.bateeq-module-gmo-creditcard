@@ -1,23 +1,23 @@
 <?php
 
-namespace Moonlay\GMOMultiPayment\Controller\Checkout;
+namespace Moonlay\GMOCreditCard\Controller\Checkout;
 
 use Magento\Framework\App\Action\Action;
 use Magento\Checkout\Model\Session;
 use Magento\Framework\App\Action\Context;
 use Magento\Sales\Model\OrderFactory;
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Moonlay\GMOMultiPayment\Helper\Crypto;
-use Moonlay\GMOMultiPayment\Helper\Data;
-use Moonlay\GMOMultiPayment\Helper\Checkout;
-use Moonlay\GMOMultiPayment\Gateway\Config\Config;
+use Moonlay\GMOCreditCard\Helper\Crypto;
+use Moonlay\GMOCreditCard\Helper\Data;
+use Moonlay\GMOCreditCard\Helper\Checkout;
+use Moonlay\GMOCreditCard\Gateway\Config\Config;
 use Psr\Log\LoggerInterface;
 
 abstract class AbstractAction extends Action {
 
-    const LOG_FILE = 'gmo_multipayment.log';
-    const GMO_MULTIPAYMENT_DEFAULT_CURRENCY_CODE = 'JPY';
-    const GMO_MULTIPAYMENT_DEFAULT_COUNTRY_CODE = 'JP';
+    const LOG_FILE = 'gmo_creditcard.log';
+    const GMO_CREDITCARD_DEFAULT_CURRENCY_CODE = 'JPY';
+    const GMO_CREDITCARD_DEFAULT_COUNTRY_CODE = 'JP';
 
     private $_context;
 

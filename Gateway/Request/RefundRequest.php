@@ -3,11 +3,11 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Moonlay\GMOMultiPayment\Gateway\Request;
+namespace Moonlay\GMOCreditCard\Gateway\Request;
 
 use Magento\Payment\Gateway\Request\BuilderInterface;
 use Magento\Checkout\Model\Session;
-use Moonlay\GMOMultiPayment\Gateway\Config\Config;
+use Moonlay\GMOCreditCard\Gateway\Config\Config;
 use Psr\Log\LoggerInterface;
 
 class RefundRequest implements BuilderInterface
