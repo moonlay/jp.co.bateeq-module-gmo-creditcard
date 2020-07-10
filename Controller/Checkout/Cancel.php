@@ -15,7 +15,7 @@ class Cancel extends AbstractAction {
             $this->getLogger()->debug('Requested order cancellation by customer. OrderId: ' . $order->getIncrementId());
             $this->getCheckoutHelper()->cancelCurrentOrder("GMO Creditcard: ".($order->getId())." was cancelled by the customer.");
             $this->getCheckoutHelper()->restoreQuote(); //restore cart
-            $this->getMessageManager()->addWarningMessage(__("You have successfully canceled your GMO Creditcard. Please click on 'Update Shopping Cart'."));
+            $this->getMessageManager()->addWarningMessage(__("支払いは中止になりました"));
         }
         $this->_redirect('checkout/cart');
     }
